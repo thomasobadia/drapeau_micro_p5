@@ -47,16 +47,16 @@ function setup() {
 function draw() {
   // Prend le volume du micro entre 0 et 1 et le map (influe donc sur le min et max de la hauteur des vaguess)
   var vol = mic.getLevel();
-  var voloff = map(vol, 0, 1, 50, 500)
+  var voloff = map(vol, 0, 1, 50, 1000)
   console.log(voloff)
 
   var terrain = []
   //Flying définit la vitesse a laquelle on se déplace dans le bruit de perlin et donc la vitesse de génération donc de mouvement
 
-  flying -= map(vol, 0, 1, 0.005, 0.1)
+  flying -= map(vol, 0, 1, 0.005, 0.5)
   var yoff = flying
   //console.log(yoff)
-  background(0)
+  background("#F6EDDF")
   // xoff et yoff et leur variation définissent l'espace donc la randomness entre 2 points du noise 
   for (var y = 0; y <= rows; y++) {
     var xoff = 0
@@ -73,8 +73,9 @@ function draw() {
     terrain.push(tmp)
   }
   // Rotate en 3D et recentre le canvas 
+  var rotateXOff = map(vol, 0, 1, PI / 3, PI / 8)
   rotateZ(PI / 2)
-  rotateX(PI / 3)
+  rotateX(rotateXOff)
   translate(-width / 2, -height / 2)
 
 
@@ -89,14 +90,19 @@ function draw() {
       //fill(255)
       //stroke(0)
       noFill()
-      if (y <= rows / 3) {
+      strokeWeight(0.75)
 
+      if (y <= rows / 3) {
         stroke('#ED2939')
+         fill("rgba(239,65,53, 0.25)")
       } else if (y <= rows * 2 / 3) {
         stroke(255)
+        fill("rgba(255,255,255, 0.25)")
       } else {
         stroke('#002395')
+        fill("rgba(0,85,164, 0.25)")
       }
+
       //vertex(x,y,z)
       vertex(x * scl, y * scl, terrain[x][y])
       vertex(x * scl, (y + 1) * scl, terrain[x][y + 1])
